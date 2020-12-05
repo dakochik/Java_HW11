@@ -2,29 +2,22 @@ package program;
 
 import tools.Iterator;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Scanner;
 
 public class Program {
     public static void main(String[] args){
-        try {
-            Scanner sc = new Scanner(System.in);
-
-            System.out.println("Please enter the path to file we need to read.");
-
-            Iterator it = new Iterator(sc.nextLine());
-
-            if (!it.startReading()) {
-                System.out.println(it.FILE_READING_ERROR);
-                return;
-            }
-
-            while (it.isAlive()) {
-                System.out.println(it.getNextString());
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please, enter path to file which we need read");
+        try(Iterator it = new Iterator(sc.nextLine())){
+            while(it.hasNext()){
+                System.out.println(it.next());
                 sc.nextLine();
             }
         }
-        catch (InterruptedException e){
-            return;
+        catch (IOException | UncheckedIOException e){
+            System.out.println("ERROR: some problems with file reading: "+e.getMessage());
         }
     }
 }
